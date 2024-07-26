@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Inventory {
+  id Int @id @default(autoincrement())
+  name String 
+  quantity_in_hand Int
+  category_code String
+  date DateTime @default(now()) 
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  name String 
+  quantity_order Int
+  category_code String
+  date DateTime @default(now()) 
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  category_code String
+  name String 
+}

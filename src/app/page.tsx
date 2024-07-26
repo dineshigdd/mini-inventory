@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -29,13 +30,19 @@ export default function Home() {
                       <li>Crissant</li>
                       <li>Hot dogs</li>
                       <li>Corn dogs</li>                      
-                  </ul>
+                  </ul>                
                 </div>
               </div>
 
-              <div className="flex justify-center mt-5">
+              <div className="flex flex-col justify-center mt-5">
+                  <div className="flex justify-between">
                       <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Covert to Image</button>
+                      <Link  href="/items/new" className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full">New Item</Link>                     
+                  </div >
+                  <div className="flex justify-between">
                       <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Send order</button>
+                      <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Edit</button>
+                  </div>
                   </div>
               <div className="mt-5">
                 <div className="font-bold">Previous order</div>
@@ -45,7 +52,9 @@ export default function Home() {
                     <li>Croissant</li>
                     <li>Jelly Roll</li>
                     <li>Concha</li>
-                    <li>Croissant</li>                  
+                    <li>Croissant</li>     
+                    <li>Jelly Roll</li>
+                    <li>Concha</li>                                
                   </ul>
               </div>
         </div>
