@@ -3,7 +3,11 @@
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
 
-export async function createItem( formData: FormData ){
+export async function createItem( 
+    fromState: { category_code: string },
+    formData: FormData 
+){
+    try{
 
 //check the user's inputs and make sure they are valid
  const name = formData.get('item') as string;
@@ -23,6 +27,13 @@ export async function createItem( formData: FormData ){
  
 
  redirect('/');
+}catch( err : unknown ){
+    if( err instanceof Error ){
+        return {
+            message: err.message
+        }
+    }
+}
 }
 
 //get innventory Items
