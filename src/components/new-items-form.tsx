@@ -1,13 +1,20 @@
 'use client'
 
 import { Inventory } from "@prisma/client"
-import { useEffect, useRef, useState } from "react"
-
+import { useActionState, useEffect, useRef, useState } from "react"
+import { createItem } from '@/actions'
 
 
 interface AddnewItemProps {
     inventory: Inventory[]
     
+}
+
+
+interface Item {
+    name : string;
+    category_code : string;
+    quantity_in_hand: number;
 }
 
 export default function AddnewItem({ inventory }: AddnewItemProps){
@@ -16,29 +23,21 @@ export default function AddnewItem({ inventory }: AddnewItemProps){
     const refSelectCategory = useRef<HTMLSelectElement>(null);
     const refInputCategory = useRef<HTMLInputElement>(null);
 
+//   const [ fromState, formAction ]= useActionState( createItem , null );
+
     const getCategory = () =>{
         
         if( refSelectCategory.current?.value == 'new_category'){
-                setIsDisabled (false );
+                setIsDisabled(false );
         }else{
-            setIsDisabled (true );
+                setIsDisabled(true );
         }
     }
 
 
-    // useEffect(()=>{
-        
-    //     // if( refSelectCategory.current?.value == 'new_category'){
-    //     //         setIsDisabled (false );
-    //     // }else{
-    //     //     setIsDisabled (true );
-    //     // }
-
-        
-    // })
 
     return(
-        <form /*action={ formAction }*/ className="flex flex-col items-center justify-center min-h-screen">
+        <form action={ createItem } className="flex flex-col items-center justify-center min-h-screen">
         <h2 className="font-bold m-3">Add a new Item</h2>
         <div className="flex flex-col gap-4">
             <div className="flex gap-4">
@@ -80,7 +79,7 @@ export default function AddnewItem({ inventory }: AddnewItemProps){
             
             <div className="flex gap-4">                
                 <input 
-                    name="item"
+                    name="newCategory"
                     disabled={ isDisabled }
                     className="border rounded p-2 w-full"
                     id="item"

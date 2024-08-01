@@ -1,17 +1,29 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
 
+// interface Item {
+//     name : string;
+//     category_code : string;
+//     quantity_in_hand: number;
+// }
+
 export async function createItem( 
-    fromState: { category_code: string },
+   
     formData: FormData 
 ){
     try{
 
 //check the user's inputs and make sure they are valid
  const name = formData.get('item') as string;
- const category_code = formData.get('category') as string;
+ let category_code = formData.get('category') as string ;
+
+ if( category_code  == 'new_category'){
+     category_code = formData.get('newCategory') as string ;
+ }
+
  const quantity_in_hand = Number( formData.get('quantity') as string );
 
 
@@ -25,8 +37,8 @@ export async function createItem(
  })
 
  
-
- redirect('/');
+ revalidatePath('/')
+//  redirect('/');
 }catch( err : unknown ){
     if( err instanceof Error ){
         return {

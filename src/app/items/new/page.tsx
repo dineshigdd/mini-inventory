@@ -1,12 +1,10 @@
 
-import { startTransition, useActionState, useEffect , useRef, useState } from "react";
 import * as actions from '@/actions/index';
 import AddnewItem from '@/components/new-items-form'
 
 
 export default async function ItemCreatePage(){
 
-//   const [ fromState, formAction ]= useActionState( actions.createItem ,  { category_code: '' });
     interface Inventory {     
             id: number;
             name: string;
