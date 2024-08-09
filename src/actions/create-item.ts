@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
-import { Prisma } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
 // interface Item {
