@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma migrate deploy && next build",
+    "migrate": "if [ \"$CI\" = \"true\" ] && [ \"$NODE_ENV\" = \"production\" ]; then prisma migrate deploy; elif [ \"$CI\" = \"true\" ]; then prisma migrate dev; fi",
+    "build": "npm run migrate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "next lint"    
