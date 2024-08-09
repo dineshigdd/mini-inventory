@@ -6,13 +6,13 @@ import AddnewItem from '@/components/new-items-form'
 
 export default async function ItemCreatePage(){
 
-    interface Items {     
-            id: number;
-            name: string;
-            quantity_in_hand: number;
-            category_code: string;
-            date: Date;
-    }
+    // interface Items {     
+    //         id: number;
+    //         name: string;
+    //         quantity_in_hand: number;
+    //         category_code: string;
+    //         date: Date;
+    // }
     
     interface Category {     
             id: number,
@@ -21,18 +21,18 @@ export default async function ItemCreatePage(){
             
     }
 
-    const fetchedInventoryItems = await actions.fetchInventoryItems();
+    // const fetchedInventoryItems = await actions.fetchInventoryItems();
     const fetchedCategries = await actions.fetchCategories();
    
 
-    const inventory: Items[] = fetchedInventoryItems.map( ({ id, name , quantity_in_hand, category_code , date } )=>  ({
-        id: id,
-        name:name,
-        quantity_in_hand: quantity_in_hand,
-        category_code: category_code,
-        date: date,
-    }
-    ));                                                                                                                                                                         
+    // const inventory: Items[] = fetchedInventoryItems.map( ({ id, name , quantity_in_hand, category_code , date } )=>  ({
+    //     id: id,
+    //     name:name,
+    //     quantity_in_hand: quantity_in_hand,
+    //     category_code: category_code,
+    //     date: date,
+    // }
+    // ));                                                                                                                                                                         
 
     const category: Category[] = fetchedCategries.map(( { id , category_code, name } )=>({
         id,
