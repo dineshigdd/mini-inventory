@@ -1,4 +1,6 @@
 
+'use server'
+
 import * as actions from '@/actions/index';
 import AddnewItem from '@/components/new-items-form'
 
