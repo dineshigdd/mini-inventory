@@ -13,25 +13,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id            Int    @id @default(autoincrement())
+  category_code String @unique
+  name          String
+  Item          Item[]
 
-model Inventory {
-  id Int @id @default(autoincrement())
-  name String 
+  @@index([category_code])
+}
+
+model Item {
+  id               Int      @id @default(autoincrement())
+  name             String
   quantity_in_hand Int
-  category_code String
-  date DateTime @default(now()) 
+  category_code    String
+  date             DateTime @default(now())
+  category         Category @relation(fields: [category_code], references: [category_code], onDelete: Cascade)
+  Order            Order[]
+
+  // Adding indexes
+  @@index([name])
+  @@index([category_code])
 }
 
 model Order {
-  id Int @id @default(autoincrement())
-  name String 
+  id             Int      @id @default(autoincrement())
+  itemId         Int
+  name           String
   quantity_order Int
-  category_code String
-  date DateTime @default(now()) 
-}
+  category_code  String
+  orderDate      DateTime @default(now())
+  // Foreign key relationship to ensure referential integrity
+  item           Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
-model Category {
-  id Int @id @default(autoincrement())
-  category_code String
-  name String 
+  // Adding indexes for individual columns
+  @@index([itemId])
+  @@index([orderDate])
 }

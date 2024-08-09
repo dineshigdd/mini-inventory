@@ -1,23 +1,30 @@
 'use client'
 
-import { Inventory } from "@prisma/client"
+import { 
+    // Item , 
+    
+    Category } from "@prisma/client"
 import { useActionState, useEffect, useRef, useState } from "react"
 import { createItem } from '@/actions'
 
 
-interface AddnewItemProps {
-    inventory: Inventory[]
+// interface AddnewItemProps {
+//     inventory: Item[]
     
+// }
+
+
+interface CategoryPorps {
+    category: Category[]
 }
 
+// interface Item {
+//     name : string;
+//     category_code : string;
+//     quantity_in_hand: number;
+// }
 
-interface Item {
-    name : string;
-    category_code : string;
-    quantity_in_hand: number;
-}
-
-export default function AddnewItem({ inventory }: AddnewItemProps){
+export default function AddnewItem( { category } : CategoryPorps ) { 
 
     const [ isDisabled, setIsDisabled ] = useState( true );
     const refSelectCategory = useRef<HTMLSelectElement>(null);
@@ -52,17 +59,17 @@ export default function AddnewItem({ inventory }: AddnewItemProps){
             <div className="flex gap-4">
                 <label className="w-15" htmlFor="category">Category</label>
                 <select onChange = { getCategory } ref={ refSelectCategory } className="border rounded p-2 w-full" name="category" id="category">
-                    <option key={ 'select category'} value='new categoty'>Select Category</option> 
-                 
+                    <option key={ 'select category'}>Select Category</option> 
+            
                     { 
-                        inventory.map( items =>                      
-                            <option key={ items.category_code }  value={ items.category_code }>{
-                                     items.category_code }                            
+                        category.map( items =>                      
+                            <option key={ items.id }  value={ items.category_code }>{
+                                     items.name }                            
                             </option>                        
                     
                     )}
                  
-                 <option key={ 'new category'} value='new_category'>Enter new category +</option>    
+                 <option key={ 'new category'} value='new_category'>New category +</option>    
                  {
                     
                  } 
