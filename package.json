@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "npm run migrate:dev && next dev",
-    "migrate:dev": "prisma migrate dev",
-    "migrate": "if [ \"$CI\" = \"true\" ] && [ \"$NODE_ENV\" = \"production\" ]; then prisma migrate deploy; elif [ \"$CI\" = \"true\" ]; then prisma migrate dev; fi",
+    "migrate:dev": "dotenv -e .env.local -- prisma migrate dev --schema=./prisma/schema.dev.prisma",
+    "migrate": "if [ \"$CI\" = \"true\" ] && [ \"$NODE_ENV\" = \"production\" ]; then prisma migrate deploy --schema=./prisma/schema.prisma; elif [ \"$CI\" = \"true\" ]; then prisma migrate dev --schema=./prisma/schema.dev.prisma; fi",
     "build": "npm run migrate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "next lint"    
+    "lint": "next lint"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
@@ -25,6 +25,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
