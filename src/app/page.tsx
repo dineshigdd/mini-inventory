@@ -1,6 +1,61 @@
-import Link from "next/link";
+'use client'
 
-export default function Home() {
+import Link from "next/link";
+import * as actions from '@/actions';
+import { useEffect, useState , useRef , MouseEvent } from "react";
+import ItemCreatePage from "./items/new/page";
+
+/*interface InvemtoryItemProps {
+    inventory: Item[]
+    
+}
+*/
+interface Item {
+    id: number,
+    name : string;
+    quantity_in_hand: number;
+    category_code : string;
+     
+}
+
+export default  function Home() {
+
+  const [ Inventory, setInventory ] = useState<Item[]>([]);
+  const listRef = useRef<(HTMLLIElement | null )[]>([]);
+  
+
+   useEffect(() => {
+        (async () => {
+        const response = await fetch('/api/inventory');
+        const data = await response.json();
+        setInventory(data);
+    })()
+    
+}, []);
+
+
+const setRef = (index: number) => (element: HTMLLIElement | null) => {
+  listRef.current[index] = element;
+};
+   
+const handleMouseOver = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=>{
+    const item = listRef.current[ itemId ];
+    
+    if( itemId && item?.style ){
+          item.style.backgroundColor = 'lightgray';
+    }
+} 
+
+const handleMouseOut = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=>{
+  const item = listRef.current[ itemId ];
+  
+  if( itemId && item?.style ){
+        item.style.backgroundColor = '';
+  }
+} 
+
+
+
   return (
     <div className="grid place-items-center min-h-screen bg-blue-100"> {/** <div className="flex items-center justify-center min-h-screen"> */}
         <div>
@@ -18,17 +73,14 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="font-bold">Available Items</div>
-                  <ul className="h-40 overflow-auto bg-slate-100 p-2">
-                      <li>Jelly Roll</li>
-                      <li>Concha</li>
-                      <li>Crissant</li>
-                      <li>Hot dogs</li>
-                      <li>Corn dogs</li>
-                      <li>Jelly Roll</li>
-                      <li>Concha</li>
-                      <li>Crissant</li>
-                      <li>Hot dogs</li>
-                      <li>Corn dogs</li>                      
+                  <ul className="h-40 overflow-auto bg-slate-100 p-2">  
+                     { Inventory.map( (item) =>
+                        <li  
+                            ref={ setRef(item.id)} 
+                            onMouseOver={ handleMouseOver( item.id ) } 
+                            onMouseOut={ handleMouseOut( item.id )}
+                            key={ item.id }>{ item.name }                            
+                        </li>)}
                   </ul>                
                 </div>
               </div>

@@ -5,21 +5,10 @@ import {  useRef, useState } from "react"
 import { createItem } from '@/actions'
 
 
-// interface AddnewItemProps {
-//     inventory: Item[]
-    
-// }
-
-
 interface CategoryPorps {
     category: Category[]
 }
 
-// interface Item {
-//     name : string;
-//     category_code : string;
-//     quantity_in_hand: number;
-// }
 
 export default function AddnewItem( { category } : CategoryPorps ) { 
 
