@@ -3,6 +3,7 @@
 
 import * as actions from '@/actions/index';
 import AddnewItem from '@/components/new-items-form'
+import { revalidatePath } from 'next/cache';
 
 
 
@@ -50,7 +51,7 @@ export default async function ItemCreatePage(){
 //add new category when the user select 'new category' from the category list
 
     
-   
+   revalidatePath('/items/new/')
     // return <div><AddnewItem inventory={ inventory }/></div>;
     return <div><AddnewItem category={ category }/></div>;
     

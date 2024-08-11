@@ -1,8 +1,9 @@
 'use client'
 
 import {  Category } from "@prisma/client"
-import {  useRef, useState } from "react"
+import {  use, useEffect, useRef, useState } from "react"
 import { createItem } from '@/actions'
+import { useRouter } from "next/navigation"
 
 
 interface CategoryPorps {
@@ -15,8 +16,7 @@ export default function AddnewItem( { category } : CategoryPorps ) {
     const [ isDisabled, setIsDisabled ] = useState( true );
     const refSelectCategory = useRef<HTMLSelectElement>(null);
     const refInputCategory = useRef<HTMLInputElement>(null);
-
-//   const [ fromState, formAction ]= useActionState( createItem , null );
+   
 
     const getCategory = () =>{
         
@@ -27,8 +27,8 @@ export default function AddnewItem( { category } : CategoryPorps ) {
         }
     }
 
-
-
+   
+   
     return(
         <form action={ createItem } className="flex flex-col items-center justify-center min-h-screen">
         <h2 className="font-bold m-3">Add a new Item</h2>
@@ -90,7 +90,7 @@ export default function AddnewItem( { category } : CategoryPorps ) {
             </div>   
 
             <div className="flex gap-4 justify-end">
-                <button type="submit" className="bg-lime-500 w-fit px-5 py-2 rounded-full">
+                <button  type="submit" className="bg-lime-500 w-fit px-5 py-2 rounded-full">
                     Add Item
                 </button>
             </div>
