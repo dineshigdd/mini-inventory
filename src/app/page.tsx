@@ -16,9 +16,11 @@ interface Item {
     date:Date,
 }
 
+
 export default  function Home() {
 
   const [ inventory, setInventory ] = useState<Item[]>([]);
+
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item
   const [ isItemselected, setIsItemselected ] = useState(false); 
@@ -32,6 +34,10 @@ export default  function Home() {
     
 }, []);
 
+const getSelectedItem = ( itemId: number | null )=>{
+  setSelectedIndex( itemId )
+  console.log( itemId )
+}
 
   return (
     <div className="grid place-items-center min-h-screen bg-blue-100"> {/** <div className="flex items-center justify-center min-h-screen"> */}
@@ -51,7 +57,10 @@ export default  function Home() {
                 <div>
                   <div className="font-bold">Available Items</div>
                   <Suspense fallback={<Loading />} >
-                       <Inventory inventory={ inventory }/>
+                       <Inventory 
+                            inventory={ inventory }
+                            getSelectedItem={ getSelectedItem }
+                      />
                   </Suspense>
                   {/* <ul className="h-40 overflow-auto bg-slate-100 p-2">  
 
@@ -76,8 +85,7 @@ export default  function Home() {
                   <h1><strong>Available Items Management</strong></h1><br/>
                   <div className="flex justify-between -mt-4">                      
                       <Link  href="/items/new" className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full">New Item</Link> 
-                      <button  className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full">Delete Item</button>    
-                      <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Edit Item</button>
+                      <Link href={ `/items/${ selectedIndex }/edit`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Edit Item</Link>
                   </div>
               </div>
               </div>

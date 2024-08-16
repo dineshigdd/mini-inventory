@@ -1,9 +1,9 @@
 'use client'
 
 import {  Category } from "@prisma/client"
-import {  use, useEffect, useRef, useState } from "react"
+import {  useRef, useState } from "react"
 import { createItem } from '@/actions'
-import { useRouter } from "next/navigation"
+
 
 
 interface CategoryPorps {
