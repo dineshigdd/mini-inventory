@@ -60,7 +60,7 @@ export default async function ItemEditPage( props: ItemEditProps ){
 //    revalidatePath('/items/new/')
     // return <div><AddnewItem inventory={ inventory }/></div>;
     return <div><EditItem 
-                    selectedItem = { selectedItem } 
+                    selectedItem = { selectedItem! } 
                     category={ category }
                 />
             </div>;
