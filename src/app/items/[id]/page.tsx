@@ -1,21 +1,14 @@
-'use server'
-
 import * as actions from '@/actions/index';
-import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 
-interface ItemEditPageProps{
+interface ItemDetailsPageProps{
     params:{
         id: string;
-    }
-    ,
-    category_code: string
+    }   
 }
 
 
-
-
-export default async function ItemDetailsPage( props: ItemEditPageProps ){
+export default async function ItemDetailsPage( props: ItemDetailsPageProps ){
 
     const item = await actions.fetchInventoryItem( parseInt(props.params.id ));
     const category=  await actions.fetchCategory( item?.category_code! );
