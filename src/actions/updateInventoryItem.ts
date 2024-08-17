@@ -1,7 +1,7 @@
 
 'use server';
 
-import { db } from '@/db';
+import  { db } from '@/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -27,15 +27,18 @@ export async function updateInventoryItem(
             }
         });
 
+        await db.$disconnect();
         revalidatePath('/')
 
     }catch( err : unknown ){
         if( err instanceof Error ){
-            await db.$disconnect()
+            await db.$disconnect();
+            
             return {
                 message: err.message
             }
         }
+      
     }
 
     redirect('/')

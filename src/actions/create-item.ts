@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { db } from '@/db';
+import  db from '@/db';
 import { v4 as uuidv4 } from 'uuid';
 
 // interface Item {
@@ -50,7 +50,7 @@ export async function createItem(
         })
 
         
-        
+        await db.$disconnect();
         revalidatePath('/')
        
         }catch( err : unknown ){

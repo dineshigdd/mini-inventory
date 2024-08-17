@@ -1,12 +1,19 @@
 import  { db } from '@/db';
-
+import { redirect } from 'next/navigation';
 
 export async function fetchInventoryItem(id: number){
  
-   const item = await db.item.findFirst({
-    where:{ id }
-   });   
-
-
- return item;
+   try{
+      const item = await db.item.findFirst({
+      where:{ id }
+      });   
+      await db.$disconnect();
+      return item;   
+   }catch(error: unknown ){
+      console.log( error );
+      await db.$disconnect()
+      redirect('/')
+   }
 }
+
+

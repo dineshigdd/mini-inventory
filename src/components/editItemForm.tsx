@@ -3,6 +3,7 @@
 import {  Category , Item } from "@prisma/client"
 import {  useEffect, useRef, useState  } from "react"
 import { updateInventoryItem } from '@/actions'
+import { deleteInventoryItem } from '@/actions';
 
 
 
@@ -34,6 +35,8 @@ export default function EditItem( { category, selectedItem } : EditItemPorps ) {
         setInputItem(selectedItem?.name);
         setInputQuantity(selectedItem.quantity_in_hand);
       }, []);
+
+    
 //     useEffect(()=>{
 //         const selectedCategory = category.find( category => category.category_code == selectedItem.category_code )?.name;
 //         setSelectedItemCategory( selectedCategory )
@@ -42,6 +45,7 @@ export default function EditItem( { category, selectedItem } : EditItemPorps ) {
 //     const handleChange = () => {
 //         setSelectedItemCategory(refSelectCategory.current?.value);
 //   };
+
     /*you can also do 
     <form action={ ( formData )=>updateInventoryItem( selectedItem?.id! , formData )></form/>*/
 
@@ -92,7 +96,9 @@ export default function EditItem( { category, selectedItem } : EditItemPorps ) {
                     />
             </div>   
 
-            <div className="flex gap-4 justify-end">
+            <div className="flex justify-between">                
+                             
+                
                 <button  type="submit" className="bg-lime-500 w-fit px-5 py-2 rounded-full">
                     Update Item
                 </button>

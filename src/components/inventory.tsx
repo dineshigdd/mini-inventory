@@ -2,6 +2,7 @@
 'use client'
 
 import { Item } from "@prisma/client";
+import { useRouter } from "next/router";
 import { useState , useRef , MouseEvent, ReactNode } from "react";
 
 
@@ -24,6 +25,7 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item for highlighting
     const [ selectedMouseOverIndex , setSelectedMouseOverIndex] = useState<number | null>(null)
     const [ isItemselected, setIsItemselected ] = useState(false); 
+
 
     const setRef = (index: number) => (element: HTMLLIElement | null) => {
         listRef.current[index] = element;
@@ -88,6 +90,8 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
         });
       }; 
 
+
+  
 
     return (
         <ul className="h-40 overflow-auto bg-slate-100 p-2">  
