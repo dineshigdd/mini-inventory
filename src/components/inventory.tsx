@@ -4,6 +4,7 @@
 import { Item } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState , useRef , MouseEvent, ReactNode } from "react";
+import InventoryItem from "./inventoryItem";
 
 
 // interface ItemProps{
@@ -95,14 +96,26 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
 
     return (
         <ul className="h-40 overflow-auto bg-slate-100 p-2">  
-                     { inventory.map( ( item ) =>
+                  {
+                    inventory.map( item => <InventoryItem                         
+                      item={ item }
+                      setRef={ setRef }
+                      handleMouseOver={ handleMouseOver } 
+                      handleMouseOut = { handleMouseOut }
+                      handleClick={ handleClick }
+                    />)
+                  }
+                    
+                          
+                  
+                     {/* { inventory.map( ( item ) =>
                         <li  
                             ref={ setRef(item.id)} 
                             onMouseOver={ handleMouseOver( item.id ) } 
                             onMouseOut={ handleMouseOut( item.id )}
                             onClick={ handleClick(item.id)}
                             key={ item.id }>{ item.name }                            
-                        </li>)}
+                        </li>)} */}
         </ul> 
     )
 }
