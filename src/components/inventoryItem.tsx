@@ -1,7 +1,7 @@
 // src/components/InventoryItemComponent.tsx
 import React from 'react';
-import { useState , useRef , MouseEvent } from "react";
-import { useDrag } from 'react-dnd';
+import { MouseEvent } from "react";
+
 
 interface InventoryItem {
   id: number;
@@ -12,43 +12,32 @@ interface InventoryItem {
 };
 
 interface InventoryItemProps {
-item: InventoryItem;
-handleMouseOver:( itemId: number ) => (event: MouseEvent<HTMLLIElement>)=> void;
-handleMouseOut : ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> void;
-handleClick: ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> void;
-setRef: (itemId: number) => (instance: HTMLLIElement | null) => void;
+    item: InventoryItem;
+    handleMouseOver:( itemId: number ) => (event: MouseEvent<HTMLLIElement>)=> void;
+    handleMouseOut : ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> void;
+    handleMouseDown:( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> void;
 }
 
 
 
-
-// const InventoryItem: React.FC<{ item: InventoryItem }> = ({ item }) => {
-//   const [{ isDragging }, drag] = useDrag(() => ({
-//     type: 'INVENTORY_ITEM',
-//     item: { item },
-//     collect: (monitor) => ({
-//       isDragging: !!monitor.isDragging(),
-//     }),
-//   }));
-
-export default function InventoryItem({ item, setRef ,handleMouseOver, handleMouseOut , handleClick }: InventoryItemProps) {
-
-  // const listRef = useRef<(HTMLLIElement | null )[]>([]);
-
-  // const setRef = (index: number) => (element: HTMLLIElement | null) > {
-  //   listRef.current[index] = element;
-  // };=
-
-  return (
-    <li 
-      key= {item.id }
-      ref={ setRef(item.id)}
+export default function InventoryItem({ 
+    item ,  
+    handleMouseOver, 
+    handleMouseOut ,    
+    handleMouseDown , 
+  }: InventoryItemProps) { 
+  
+  return (    
+    
+    <li      
+      key= {item.id }          
       onMouseOver={ handleMouseOver( item.id )}
-      onMouseOut={ handleMouseOut( item.id )}
-      onClick= { handleClick( item.id )}
+      onMouseOut={ handleMouseOut( item.id )}      
+      onMouseDown={ handleMouseDown( item.id )}
     >
-    <p>{item.name}</p>
+    <p>{ item.id }.{item.name}</p>
    
-  </li>
+   
+  </li>  
   );
 }

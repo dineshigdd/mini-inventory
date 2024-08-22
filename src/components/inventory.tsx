@@ -3,17 +3,9 @@
 
 import { Item } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useState , useRef , MouseEvent, ReactNode } from "react";
+import { useState , useRef , MouseEvent, ReactNode, MouseEventHandler } from "react";
 import InventoryItem from "./inventoryItem";
-
-
-// interface ItemProps{
-//     inventory: Item[]
-// }
-
-// interface SelectedItemProps {
-//   getSelectedItem: ( itemId: number ) => HTMLElement
-// }
+import  Draggable  from '@/utlltiy/draggable';
 
 interface InventoryProps {
   inventory: Item[];
@@ -23,12 +15,13 @@ interface InventoryProps {
 export default function Inventory( { inventory  , getSelectedItem }: InventoryProps ){
 
     const listRef = useRef<(HTMLLIElement | null )[]>([]);
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item for highlighting
+    const [ selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item for highlighting
     const [ selectedMouseOverIndex , setSelectedMouseOverIndex] = useState<number | null>(null)
     const [ isItemselected, setIsItemselected ] = useState(false); 
-
+  
 
     const setRef = (index: number) => (element: HTMLLIElement | null) => {
+      
         listRef.current[index] = element;
       };
          
@@ -68,16 +61,13 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
       }
       } 
       
-      const handleClick = (itemId: number) =>(event: MouseEvent<HTMLLIElement>)=> {
+      const handleMouseDown = (itemId: number) =>(event: MouseEvent<HTMLLIElement>)=> {
+        
+        // handleClick(itemId);
         setSelectedIndex(itemId); // Update the selected item index for highlighting
         setIsItemselected( true )
-
-        // if( selectedIndex !== null ){
-        //       console.log( "itemId"+itemId)
-        //       console.log( "selectedIndex"+selectedIndex)
-        //       getSelectedItem( itemId )
-        // }
-
+        
+        
         if ( selectedIndex == null ){             
               getSelectedItem( selectedMouseOverIndex)
         }else{
@@ -89,24 +79,47 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
             item.style.backgroundColor = idx === itemId ? 'gray' : ''; // Set background to gray for selected item
           }
         });
-      }; 
+      };
+    
+
+      // const handleClick = (itemId: number) => {
+        
+      //   setSelectedIndex(itemId); // Update the selected item index for highlighting
+      //   setIsItemselected( true )
+        
+        
+      //   if ( selectedIndex == null ){             
+      //         getSelectedItem( selectedMouseOverIndex)
+      //   }else{
+      //         getSelectedItem( itemId )
+      //   }
+          
+      //   listRef.current.forEach((item, idx) => {
+      //     if (item) {
+      //       item.style.backgroundColor = idx === itemId ? 'gray' : ''; // Set background to gray for selected item
+      //     }
+      //   });
+      // }; 
 
 
   
 
     return (
         <ul className="h-40 overflow-auto bg-slate-100 p-2">  
+                
                   {
-                    inventory.map( item => <InventoryItem                         
-                      item={ item }
+                    inventory.map( item => <Draggable 
+                      itemId={ item.id }  
                       setRef={ setRef }
-                      handleMouseOver={ handleMouseOver } 
-                      handleMouseOut = { handleMouseOut }
-                      handleClick={ handleClick }
-                    />)
+                      ><InventoryItem                                 
+                            item={ item }                      
+                            handleMouseOver={ handleMouseOver } 
+                            handleMouseOut = { handleMouseOut }                     
+                            handleMouseDown={ handleMouseDown} 
+                        />  </Draggable>)
                   }
                     
-                          
+                 
                   
                      {/* { inventory.map( ( item ) =>
                         <li  

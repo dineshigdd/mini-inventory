@@ -7,6 +7,11 @@ import ItemCreatePage from "./items/new/page";
 import Inventory from "@/components/inventory";
 import { Suspense } from "react";
 import { useRouter } from 'next/navigation';
+import OrderList from "@/components/orderList";
+import { Droppable } from '@/utlltiy/droppable';
+import { DndContext, DragEndEvent , useDroppable} from '@dnd-kit/core';
+
+
 
 interface Item {
     id: number,
@@ -20,6 +25,7 @@ interface Item {
 export default  function Home() {
 
   const [ inventory, setInventory ] = useState<Item[]>([]);
+  const [ order, setOrderList] = useState<Item[]>([]);
 
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item
@@ -35,12 +41,27 @@ export default  function Home() {
 }, []);
 
 const getSelectedItem = ( itemId: number | null )=>{
-  setSelectedIndex( itemId )
-  console.log( itemId )
+  setSelectedIndex( itemId ) 
 }
 
 
+const handleDragEnd = (event: DragEndEvent) => {
+  const { active, over } = event;
+
+  if (over?.id === 'droppable') {   
+       
+       const draggedItem = inventory.find(item => item.id === active.id );
+       
+    if (draggedItem) {      
+      setOrderList((prevItems) => [...prevItems, draggedItem]);
+    }
+    
+  }
+};
+
+
   return (
+    <DndContext onDragEnd={handleDragEnd}>
     <div className="grid place-items-center min-h-screen bg-blue-100"> {/** <div className="flex items-center justify-center min-h-screen"> */}
         <div>
           <div><h2>Mini Inventory control system</h2></div>
@@ -49,11 +70,17 @@ const getSelectedItem = ( itemId: number | null )=>{
               <div className="grid grid-cols-2 gap-5">
                 <div>
                   <div className="font-bold">New Order</div>
-                   <ul className="h-40 overflow-auto bg-slate-100 p-2">
-                      <li>Jelly Roll</li>
-                      <li>Concha</li>
-                      <li>Croissant</li>
-                  </ul>                 
+                  <Droppable>
+                  {/* <ul className="h-40 overflow-aut  o bg-slate-100 p-2 border border-gray-300">                    */}
+                      {/* { order.map( item => <OrderList item={ item } addItem={() => {}}/>) }         */}
+                      {/* <OrderList item={ item } addItem={() => {}} />            */}
+                      <OrderList orderList={ order } />
+                      {/* { order.map( item => <li>{ item.name }</li>)}         */}
+                    {/* </ul> */}
+                </Droppable>
+                   {/* <ul className="h-40 overflow-auto bg-slate-100 p-2">
+                     
+                  </ul>                  */}
                 </div>
                 <div>
                   <div className="font-bold">Available Items</div>
@@ -106,6 +133,7 @@ const getSelectedItem = ( itemId: number | null )=>{
         </div>
       </div>
   </div>
+  </DndContext>
   );
 }
 

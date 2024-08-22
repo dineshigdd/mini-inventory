@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev":"next dev",
+    "dev": "next dev",
     "dev:init": "npm run migrate:dev && next dev",
     "migrate:dev": "dotenv -e .env.local -- prisma migrate dev --schema=./prisma/schema.dev.prisma",
     "migrate": "if [ \"$CI\" = \"true\" ] && [ \"$NODE_ENV\" = \"production\" ]; then prisma migrate deploy --schema=./prisma/schema.prisma; elif [ \"$CI\" = \"true\" ]; then prisma migrate dev --schema=./prisma/schema.dev.prisma; fi",
@@ -13,6 +13,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.1.0",
     "@prisma/client": "^5.17.0",
     "@vercel/postgres": "^0.9.0",
     "next": "14.2.4",
