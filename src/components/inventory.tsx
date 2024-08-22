@@ -109,6 +109,7 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
                 
                   {
                     inventory.map( item => <Draggable 
+                      key={ item.id }
                       itemId={ item.id }  
                       setRef={ setRef }
                       ><InventoryItem                                 

@@ -22,7 +22,7 @@ export default function OrderList( { orderList }: OrderListProps){
   
   return (
     <ul className="h-40 overflow-auto bg-slate-100 p-2 border border-gray-300">       
-       { orderList.map( item => <li>{ item.name }</li>)}   
+       { orderList.map( item => <li key={ item.id }>{ item.name }</li>)}   
     </ul>
   );
 }
