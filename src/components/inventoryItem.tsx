@@ -35,7 +35,7 @@ export default function InventoryItem({
       onMouseOut={ handleMouseOut( item.id )}      
       onMouseDown={ handleMouseDown( item.id )}
     >
-    <p>{ item.id }.{item.name}</p>
+    <p>{item.name}</p>
    
    
   </li>  
