@@ -6,11 +6,15 @@ import { useRouter } from "next/router";
 import { useState , useRef , MouseEvent, ReactNode, MouseEventHandler } from "react";
 import InventoryItem from "./inventoryItem";
 import  Draggable  from '@/utlltiy/draggable';
+import { handleMouseOver , handleMouseDown , handleMouseOut } from '@/utlltiy/index';
+
 
 interface InventoryProps {
   inventory: Item[];
   getSelectedItem: ( itemId: number | null ) => void
 }
+
+
 
 export default function Inventory( { inventory  , getSelectedItem }: InventoryProps ){
 
@@ -25,61 +29,63 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
         listRef.current[index] = element;
       };
          
-      const handleMouseOver = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> {
-          const item = listRef.current[ itemId ];
-          setSelectedMouseOverIndex( itemId )
-          
-          if( itemId && item?.style  ){
-                item.style.backgroundColor = 'lightgray';         
-          }
       
-          if( itemId && item?.style && isItemselected ){
-            if( selectedIndex !== itemId ){
-              item.style.backgroundColor = 'lightgray';
-            }else{
-              item.style.backgroundColor = 'gray';
-            }
-        }
+
+      // const handleMouseOver = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> {
+      //     const item = listRef.current[ itemId ];
+      //     setSelectedMouseOverIndex( itemId )
+          
+      //     if( itemId && item?.style  ){
+      //           item.style.backgroundColor = 'lightgray';         
+      //     }
+      
+      //     if( itemId && item?.style && isItemselected ){
+      //       if( selectedIndex !== itemId ){
+      //         item.style.backgroundColor = 'lightgray';
+      //       }else{
+      //         item.style.backgroundColor = 'gray';
+      //       }
+      //   }
       
          
-      } 
+      // } 
       
-      const handleMouseOut = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> {
-        const item = listRef.current[ itemId ];
+      // const handleMouseOut = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> {
+      //   const item = listRef.current[ itemId ];
           
       
-        if( itemId && item?.style && !isItemselected ) {
-              item.style.backgroundColor = '';      
-        }
+      //   if( itemId && item?.style && !isItemselected ) {
+      //         item.style.backgroundColor = '';      
+      //   }
       
-        if( itemId && item?.style && isItemselected ){
-          if( selectedIndex !== itemId ){
-            item.style.backgroundColor = '';
-          }else{
-            item.style.backgroundColor = 'gray';
-          }
-      }
-      } 
+      //   if( itemId && item?.style && isItemselected ){
+      //     if( selectedIndex !== itemId ){
+      //       item.style.backgroundColor = '';
+      //     }else{
+      //       item.style.backgroundColor = 'gray';
+      //     }
+      // }
+      // } 
       
-      const handleMouseDown = (itemId: number) =>(event: MouseEvent<HTMLLIElement>)=> {
+      // const handleMouseDown = (itemId: number) =>(event: MouseEvent<HTMLLIElement>)=> {
         
-        // handleClick(itemId);
-        setSelectedIndex(itemId); // Update the selected item index for highlighting
-        setIsItemselected( true )
+      //   // handleClick(itemId);
+      //   setSelectedIndex(itemId); // Update the selected item index for highlighting
+      //   setIsItemselected( true )
         
         
-        if ( selectedIndex == null ){             
-              getSelectedItem( selectedMouseOverIndex)
-        }else{
-              getSelectedItem( itemId )
-        }
+      //   if ( selectedIndex == null ){             
+      //         getSelectedItem( selectedMouseOverIndex)
+      //   }else{
+      //         getSelectedItem( itemId )
+      //   }
           
-        listRef.current.forEach((item, idx) => {
-          if (item) {
-            item.style.backgroundColor = idx === itemId ? 'gray' : ''; // Set background to gray for selected item
-          }
-        });
-      };
+      //   listRef.current.forEach((item, idx) => {
+      //     if (item) {
+      //       item.style.backgroundColor = idx === itemId ? 'gray' : ''; // Set background to gray for selected item
+      //     }
+      //   });
+      // };
     
 
       // const handleClick = (itemId: number) => {
@@ -114,10 +120,32 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
                       setRef={ setRef }
                       ><InventoryItem                                 
                             item={ item }                      
-                            handleMouseOver={ handleMouseOver } 
-                            handleMouseOut = { handleMouseOut }                     
-                            handleMouseDown={ handleMouseDown} 
-                        />  </Draggable>)
+                            handleMouseOver={ ()=>handleMouseOver({
+                              itemId:item.id,
+                              listRef,
+                              selectedIndex, 
+                              isItemselected,
+                              setSelectedMouseOverIndex,
+                                             
+                            })}
+
+                            handleMouseOut = { ()=>handleMouseOut({
+                              itemId:item.id,
+                              listRef,
+                              selectedIndex,
+                              isItemselected, 
+                            }) }           
+                                      
+                            handleMouseDown={ ()=>handleMouseDown({
+                              itemId:item.id,
+                              listRef,
+                              selectedIndex,
+                              selectedMouseOverIndex,
+                              getSelectedItem,
+                              setIsItemselected,
+                              setSelectedIndex
+                            })} 
+                          />  </Draggable>)
                   }
                     
                  
