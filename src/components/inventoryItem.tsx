@@ -13,9 +13,9 @@ interface InventoryItem {
 
 interface InventoryItemProps {
     item: InventoryItem;
-    handleMouseOver:( itemId: number ) => (event: MouseEvent<HTMLLIElement>)=> void;
-    handleMouseOut : ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> void;
-    handleMouseDown:( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> void;
+    handleMouseOver:(event: MouseEvent<HTMLLIElement>)=> void;
+    handleMouseOut : (event: MouseEvent<HTMLLIElement>)=> void;
+    handleMouseDown: (event: MouseEvent<HTMLLIElement>)=> void;
 }
 
 
@@ -31,9 +31,9 @@ export default function InventoryItem({
     
     <li      
       key= {item.id }          
-      onMouseOver={ handleMouseOver( item.id )}
-      onMouseOut={ handleMouseOut( item.id )}      
-      onMouseDown={ handleMouseDown( item.id )}
+      onMouseOver={ handleMouseOver }
+      onMouseOut={ handleMouseOut }      
+      onMouseDown={ handleMouseDown }
     >
     <p>{item.name}</p>
    

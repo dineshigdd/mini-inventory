@@ -14,6 +14,17 @@ interface InventoryProps {
   getSelectedItem: ( itemId: number | null ) => void
 }
 
+interface MouseProps{
+  itemId:number;
+  listRef: React.RefObject<(HTMLLIElement | null)[]>;  
+  selectedIndex: number;
+  isItemselected: boolean;
+  selectedMouseOverIndex: ( itemId: number )=> void;
+  getSelectedItem:( selectedMouseOverIndex: number )=> void;
+  setIsItemselected:(isItemselected: boolean)=> void,
+  setSelectedIndex:( itemId: number )=> void
+}
+
 
 
 export default function Inventory( { inventory  , getSelectedItem }: InventoryProps ){
@@ -22,93 +33,14 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
     const [ selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item for highlighting
     const [ selectedMouseOverIndex , setSelectedMouseOverIndex] = useState<number | null>(null)
     const [ isItemselected, setIsItemselected ] = useState(false); 
+    
   
-
+  
     const setRef = (index: number) => (element: HTMLLIElement | null) => {
       
         listRef.current[index] = element;
       };
-         
       
-
-      // const handleMouseOver = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> {
-      //     const item = listRef.current[ itemId ];
-      //     setSelectedMouseOverIndex( itemId )
-          
-      //     if( itemId && item?.style  ){
-      //           item.style.backgroundColor = 'lightgray';         
-      //     }
-      
-      //     if( itemId && item?.style && isItemselected ){
-      //       if( selectedIndex !== itemId ){
-      //         item.style.backgroundColor = 'lightgray';
-      //       }else{
-      //         item.style.backgroundColor = 'gray';
-      //       }
-      //   }
-      
-         
-      // } 
-      
-      // const handleMouseOut = ( itemId:number )=> (event: MouseEvent<HTMLLIElement>)=> {
-      //   const item = listRef.current[ itemId ];
-          
-      
-      //   if( itemId && item?.style && !isItemselected ) {
-      //         item.style.backgroundColor = '';      
-      //   }
-      
-      //   if( itemId && item?.style && isItemselected ){
-      //     if( selectedIndex !== itemId ){
-      //       item.style.backgroundColor = '';
-      //     }else{
-      //       item.style.backgroundColor = 'gray';
-      //     }
-      // }
-      // } 
-      
-      // const handleMouseDown = (itemId: number) =>(event: MouseEvent<HTMLLIElement>)=> {
-        
-      //   // handleClick(itemId);
-      //   setSelectedIndex(itemId); // Update the selected item index for highlighting
-      //   setIsItemselected( true )
-        
-        
-      //   if ( selectedIndex == null ){             
-      //         getSelectedItem( selectedMouseOverIndex)
-      //   }else{
-      //         getSelectedItem( itemId )
-      //   }
-          
-      //   listRef.current.forEach((item, idx) => {
-      //     if (item) {
-      //       item.style.backgroundColor = idx === itemId ? 'gray' : ''; // Set background to gray for selected item
-      //     }
-      //   });
-      // };
-    
-
-      // const handleClick = (itemId: number) => {
-        
-      //   setSelectedIndex(itemId); // Update the selected item index for highlighting
-      //   setIsItemselected( true )
-        
-        
-      //   if ( selectedIndex == null ){             
-      //         getSelectedItem( selectedMouseOverIndex)
-      //   }else{
-      //         getSelectedItem( itemId )
-      //   }
-          
-      //   listRef.current.forEach((item, idx) => {
-      //     if (item) {
-      //       item.style.backgroundColor = idx === itemId ? 'gray' : ''; // Set background to gray for selected item
-      //     }
-      //   });
-      // }; 
-
-
-  
 
     return (
         <ul className="h-40 overflow-auto bg-slate-100 p-2">  
@@ -120,7 +52,7 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
                       setRef={ setRef }
                       ><InventoryItem                                 
                             item={ item }                      
-                            handleMouseOver={ ()=>handleMouseOver({
+                            handleMouseOver={ handleMouseOver({
                               itemId:item.id,
                               listRef,
                               selectedIndex, 
@@ -129,14 +61,14 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
                                              
                             })}
 
-                            handleMouseOut = { ()=>handleMouseOut({
+                            handleMouseOut = { handleMouseOut({
                               itemId:item.id,
                               listRef,
                               selectedIndex,
                               isItemselected, 
-                            }) }           
-                                      
-                            handleMouseDown={ ()=>handleMouseDown({
+                            })}           
+
+                            handleMouseDown={ handleMouseDown({
                               itemId:item.id,
                               listRef,
                               selectedIndex,
