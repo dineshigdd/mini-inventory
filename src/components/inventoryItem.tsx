@@ -1,6 +1,5 @@
-// src/components/InventoryItemComponent.tsx
-import React from 'react';
-import { MouseEvent } from "react";
+import React , { MouseEvent }  from 'react';
+
 
 
 interface InventoryItem {

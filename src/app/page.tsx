@@ -1,15 +1,12 @@
 'use client'
 
 import Link from "next/link";
-import * as actions from '@/actions';
-import { useEffect, useState , useRef , MouseEvent } from "react";
-import ItemCreatePage from "./items/new/page";
+import { useEffect, useState , useRef  } from "react";
 import Inventory from "@/components/inventory";
 import { Suspense } from "react";
-import { useRouter } from 'next/navigation';
 import OrderList from "@/components/orderList";
-import { Droppable } from '@/utlltiy/droppable';
-import { DndContext, DragEndEvent , useDroppable} from '@dnd-kit/core';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { handleMouseOver , handleMouseDown , handleMouseOut ,  droppable as Droppable  } from '@/utlltiy/index';
 
 
 
@@ -25,10 +22,13 @@ interface Item {
 export default  function Home() {
 
   const [ inventory, setInventory ] = useState<Item[]>([]);
-  const [ order, setOrderList] = useState<Item[]>([]);
+  const [ orderList, setOrderList] = useState<Item[]>([]);
 
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item
+  const [selectedOrderListIndex, setSelectedIOrderListIndex] = useState<number | null>(null); // State to track the selected item
+
+
   const [ isItemselected, setIsItemselected ] = useState(false); 
 
    useEffect(() => {
@@ -43,6 +43,11 @@ export default  function Home() {
 const getSelectedItem = ( itemId: number | null )=>{
   setSelectedIndex( itemId ) 
 }
+
+const getOrderSelectedItem = ( itemId: number | null )=>{
+  setSelectedIOrderListIndex( itemId ) 
+}
+
 
 
 const handleDragEnd = (event: DragEndEvent) => {
@@ -71,16 +76,13 @@ const handleDragEnd = (event: DragEndEvent) => {
                 <div>
                   <div className="font-bold">New Order</div>
                   <Droppable>
-                  {/* <ul className="h-40 overflow-aut  o bg-slate-100 p-2 border border-gray-300">                    */}
-                      {/* { order.map( item => <OrderList item={ item } addItem={() => {}}/>) }         */}
-                      {/* <OrderList item={ item } addItem={() => {}} />            */}
-                      <OrderList orderList={ order } />
-                      {/* { order.map( item => <li>{ item.name }</li>)}         */}
-                    {/* </ul> */}
+                    <OrderList 
+                              orderList={ orderList }
+                              getSelectedItem={ getOrderSelectedItem }
+                        />
+                  
                 </Droppable>
-                   {/* <ul className="h-40 overflow-auto bg-slate-100 p-2">
-                     
-                  </ul>                  */}
+                   
                 </div>
                 <div>
                   <div className="font-bold">Available Items</div>

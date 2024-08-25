@@ -2,11 +2,9 @@
 'use client'
 
 import { Item } from "@prisma/client";
-import { useRouter } from "next/router";
-import { useState , useRef , MouseEvent, ReactNode, MouseEventHandler } from "react";
+import { useState , useRef } from "react";
 import InventoryItem from "./inventoryItem";
-import  Draggable  from '@/utlltiy/draggable';
-import { handleMouseOver , handleMouseDown , handleMouseOut } from '@/utlltiy/index';
+import { handleMouseOver , handleMouseDown , handleMouseOut , draggable as Draggable } from '@/utlltiy/index';
 
 
 interface InventoryProps {
@@ -14,16 +12,6 @@ interface InventoryProps {
   getSelectedItem: ( itemId: number | null ) => void
 }
 
-interface MouseProps{
-  itemId:number;
-  listRef: React.RefObject<(HTMLLIElement | null)[]>;  
-  selectedIndex: number;
-  isItemselected: boolean;
-  selectedMouseOverIndex: ( itemId: number )=> void;
-  getSelectedItem:( selectedMouseOverIndex: number )=> void;
-  setIsItemselected:(isItemselected: boolean)=> void,
-  setSelectedIndex:( itemId: number )=> void
-}
 
 
 
@@ -33,14 +21,10 @@ export default function Inventory( { inventory  , getSelectedItem }: InventoryPr
     const [ selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item for highlighting
     const [ selectedMouseOverIndex , setSelectedMouseOverIndex] = useState<number | null>(null)
     const [ isItemselected, setIsItemselected ] = useState(false); 
+   
     
-  
-  
-    const setRef = (index: number) => (element: HTMLLIElement | null) => {
-      
-        listRef.current[index] = element;
-      };
-      
+    const setRef = (index: number) => (element: HTMLLIElement | null) => listRef.current[index] = element;
+         
 
     return (
         <ul className="h-40 overflow-auto bg-slate-100 p-2">  
