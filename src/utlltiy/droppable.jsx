@@ -8,7 +8,7 @@ export function droppable(props) {
   const style = {
     color: isOver ? 'green' : undefined,
   };
-  console.log( props)
+  
   
   return (
     <div ref={setNodeRef} style={style}>

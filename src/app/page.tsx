@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { useEffect, useState , useRef  } from "react";
+import { useEffect, useState , useRef, useMemo  } from "react";
 import Inventory from "@/components/inventory";
 import { Suspense } from "react";
 import OrderList from "@/components/orderList";
@@ -18,18 +18,17 @@ interface Item {
     date:Date,
 }
 
+      
 
 export default  function Home() {
 
   const [ inventory, setInventory ] = useState<Item[]>([]);
   const [ orderList, setOrderList] = useState<Item[]>([]);
-
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item
   const [selectedOrderListIndex, setSelectedIOrderListIndex] = useState<number | null>(null); // State to track the selected item
-
-
   const [ isItemselected, setIsItemselected ] = useState(false); 
+  const tempList = useMemo<number[]>(() => [], []);
 
    useEffect(() => {
         (async () => {
@@ -53,16 +52,38 @@ const getOrderSelectedItem = ( itemId: number | null )=>{
 const handleDragEnd = (event: DragEndEvent) => {
   const { active, over } = event;
 
+        
   if (over?.id === 'droppable') {   
        
-       const draggedItem = inventory.find(item => item.id === active.id );
+       const draggedItem = inventory.find(item => item.id === active.id );      
        
-    if (draggedItem) {      
-      setOrderList((prevItems) => [...prevItems, draggedItem]);
-    }
-    
+    if (draggedItem) {         
+      
+        // if( tempList.length == 0 ){       
+        //     tempList.push( draggedItem.id );
+         
+        // }
+        // else{        
+            let i = 0;
+            while (i < tempList.length) {
+              if (tempList[i] === draggedItem.id) {
+                // if the item was found
+                return; // Exit the loop early
+              }
+              i++;
+            // }           
+          
+       }          
+            
+      tempList.push(  draggedItem.id )  
+      setOrderList((prevItems) =>[...prevItems, draggedItem]);
+    } 
   }
+ 
+    
+  
 };
+
 
 
   return (
