@@ -62,6 +62,7 @@ const handleDragEnd = (event: DragEndEvent) => {
         // if( tempList.length == 0 ){       
         //     tempList.push( draggedItem.id );
          
+        
         // }
         // else{        
             let i = 0;
