@@ -9,7 +9,7 @@ interface DraggableProps {
 }
 
 
-export function draggable({ itemId, children , setRef }: DraggableProps) {
+export function Draggable({ itemId, children , setRef }: DraggableProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id:itemId,
   });

@@ -4,7 +4,7 @@
 import { Item } from "@prisma/client";
 import { useState , useRef } from "react";
 import InventoryItem from "./inventoryItem";
-import { handleMouseOver , handleMouseDown , handleMouseOut , draggable as Draggable } from '@/utlltiy/index';
+import { handleMouseOver , handleMouseDown , handleMouseOut , Draggable } from '@/utlltiy/index';
 
 
 interface InventoryProps {

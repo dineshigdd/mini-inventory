@@ -6,7 +6,7 @@ import Inventory from "@/components/inventory";
 import { Suspense } from "react";
 import OrderList from "@/components/orderList";
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import { handleMouseOver , handleMouseDown , handleMouseOut ,  droppable as Droppable  } from '@/utlltiy/index';
+import { handleMouseOver , handleMouseDown , handleMouseOut ,  Droppable  } from '@/utlltiy/index';
 
 
 
