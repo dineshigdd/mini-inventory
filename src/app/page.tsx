@@ -48,44 +48,60 @@ const getOrderSelectedItem = ( itemId: number | null )=>{
 }
 
 
-
 const handleDragEnd = (event: DragEndEvent) => {
   const { active, over } = event;
 
         
   if (over?.id === 'droppable') {   
-       
-       const draggedItem = inventory.find(item => item.id === active.id );      
-       
-    if (draggedItem) {         
-      
+        const draggedItem = inventory.find(item => item.id === active.id );     
+        const storedItems = localStorage.getItem('items');        
+          
+    if (draggedItem) {   
+      if( storedItems ){
+          const storedItemsArr = JSON.parse( storedItems );
+          for (let i = 0; i < storedItemsArr.length; i++) {
+            if (storedItemsArr[i].id == draggedItem.id) {
+              return; 
+            }
+          }
+        }
         // if( tempList.length == 0 ){       
         //     tempList.push( draggedItem.id );
          
         
         // }
         // else{        
-            let i = 0;
-            while (i < tempList.length) {
-              if (tempList[i] === draggedItem.id) {
-                // if the item was found
-                return; // Exit the loop early
-              }
-              i++;
-            // }           
+      //       let i = 0;
+      //       while (i < tempList.length) {
+      //         if (tempList[i] === draggedItem.id) {
+      //           // if the item was found
+      //           return; // Exit the loop early
+      //         }
+      //         i++;
+      //       // }           
           
-       }          
+      //  }          
             
-      tempList.push(  draggedItem.id )  
-      setOrderList((prevItems) =>[...prevItems, draggedItem]);
-    } 
-  }
- 
-    
+      // tempList.push(  draggedItem.id )  
+      setOrderList((prevItems) =>[...prevItems, draggedItem]);     
   
+    } 
+  } 
 };
 
+useEffect(() => {
+         if( orderList.length !== 0 ) {             
+             localStorage.setItem('items', JSON.stringify(orderList))
+}}, [orderList ]);
 
+
+useEffect(() => {  
+  const storedItems = localStorage.getItem('items');   
+  if( storedItems ){
+    const storedItemsArr = JSON.parse( storedItems );
+    setOrderList(storedItemsArr)  
+  } 
+},[!orderList]);
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
