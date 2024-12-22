@@ -92,7 +92,7 @@ const handleDragEnd = (event: DragEndEvent) => {
 useEffect(() => {
          if( orderList.length !== 0 ) {             
              localStorage.setItem('items', JSON.stringify(orderList))
-}}, [orderList ]);
+}}, [orderList]);
 
 
 useEffect(() => {  
@@ -119,8 +119,7 @@ useEffect(() => {
                               getSelectedItem={ getOrderSelectedItem }
                         />
                   
-                </Droppable>
-                   
+                </Droppable>                
                 </div>
                 <div>
                   <div className="font-bold">Available Items</div>
@@ -145,17 +144,42 @@ useEffect(() => {
               </div>
 
               <div className="flex flex-col justify-center mt-5">
-                  <div className="flex justify-between">
-                     <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Send order</button>  
-                      <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Covert to Image</button>                                                           
+                <div className="border-y-2 border-y-indigo-500 mt-2 py-2">
+                  <h1><strong>Order Items Management</strong></h1><br/>
+                  <div className="flex justify-between -mt-4">
+                  <ul>
+                    <li>Quantity in hand 
+                      { inventory.map( item => 
+                        (item.id == Number(selectedOrderListIndex) ) ? 
+                            item.quantity_in_hand: '')}<span></span></li>
+                    <li>Quantity to order
+                       {
+                        orderList.map( item => 
+                          ( item.id == Number(selectedOrderListIndex) ) ? 
+                              (
+                              <>
+                                <input defaultValue='0' className="w-10" type='text' value= { item.quantity_in_hand } /> 
+                                <button className="bg-gray-500 w-fit m-2 px-2">+</button>
+                                <button className="bg-gray-500 w-fit m-2 px-2">-</button> 
+                              </>
+                            )
+                              :
+                            '') 
+                        }
+                        
+                      </li>
+                  </ul>
+                     {/* <Link href={`/items/${selectedOrderListIndex}`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">View Item</Link>  
+                      <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Covert to Image</button>                                                            */}
                   </div>
-              <div className="border-y-2 border-y-indigo-500 mt-2 py-2">
-                  <h1><strong>Available Items Management</strong></h1><br/>
-                  <div className="flex justify-between -mt-4">                      
-                      <Link  href="/items/new" className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full">New Item</Link> 
-                      <Link href={ `/items/${ selectedIndex }`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">View Item</Link>
-                  </div>
-              </div>
+                </div>
+                <div className="border-y-2 border-y-indigo-500 mt-2 py-2">
+                    <h1><strong>Available Items Management</strong></h1><br/>
+                    <div className="flex justify-between -mt-4">                      
+                        <Link  href="/items/new" className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full">New Item</Link> 
+                        <Link href={ `/items/${ selectedIndex }`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">View Item</Link>
+                    </div>
+                </div>
               </div>
               <div className="mt-5">
                 <div className="font-bold">Previous order</div>

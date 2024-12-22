@@ -37,8 +37,9 @@ export default function OrderItem({
       onMouseOut={ handleMouseOut }      
       onMouseDown={ handleMouseDown }
     >
-    <p>{item.name}</p>
-   
+    <div>{item.name}       
+          <button className='mx-3 px-1 bg-red-400'>del</button>                
+    </div>
    
   </li>  
   );
