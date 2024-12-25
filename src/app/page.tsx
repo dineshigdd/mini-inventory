@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import OrderList from "@/components/orderList";
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { handleMouseOver , handleMouseDown , handleMouseOut ,  Droppable  } from '@/utlltiy/index';
+import { Red_Rose } from "next/font/google";
 
 
 
@@ -86,7 +87,7 @@ const handleDragEnd = (event: DragEndEvent) => {
       //  }          
             
       // tempList.push(  draggedItem.id )  
-      console.log( draggedItem)
+      // console.log( draggedItem)
       setOrderList((prevItems) =>[...prevItems, draggedItem]);     
   
     } 
@@ -94,9 +95,11 @@ const handleDragEnd = (event: DragEndEvent) => {
 };
 
 useEffect(() => {
-         if( orderList.length !== 0 ) {             
-             localStorage.setItem('items', JSON.stringify(orderList))
-}}, [orderList]);
+         if( orderList.length > 0  ) {               
+                  localStorage.setItem('items', JSON.stringify(orderList))
+            }
+                      
+}, [orderList]);
 
 
 useEffect(() => {  
@@ -115,13 +118,30 @@ useEffect(()=> {
 },[ quantityOrder])
 
 //Deleting an item from the order list
+// const deleteOrderItem = () => {
+//   setOrderList((orderListItems) =>
+//     orderListItems.filter((item, index) => item.id !== selectedOrderListIndex)
+//   );
+// };
+
 const deleteOrderItem = () => {
-  setOrderList((orderListItems) =>
-    orderListItems.filter((item, index) => item.id !== selectedOrderListIndex)
-  );
+  setOrderList((orderListItems) => {
+    // Log the current length of the array
+    console.log("orderListItems.length:", orderListItems.length);
+
+    // Check if the array has more than one item
+    if (orderListItems.length > 1 ) {
+      // Return the filtered array
+      return orderListItems.filter((item) => item.id !== selectedOrderListIndex);
+    }
+    else{
+      localStorage.clear()
+      return [];
+    }
+    // If only one item is left, return an empty array
+   
+  });
 };
-
-
 
   
 
@@ -174,7 +194,7 @@ const deleteOrderItem = () => {
                     <li>Quantity in hand 
                       { inventory.map( item => 
                         (item.id == Number(selectedOrderListIndex) ) ? 
-                            item.quantity_in_hand: '')}<span></span></li>
+                            item.quantity_in_hand: '')}</li>
                     <li>Quantity to order
                        {
                         orderList.map( item => 
