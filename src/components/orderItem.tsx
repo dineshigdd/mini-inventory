@@ -1,4 +1,4 @@
-import React , { MouseEvent }  from 'react';
+import React , { MouseEvent, MouseEventHandler, useEffect }  from 'react';
 
 
 
@@ -16,31 +16,34 @@ interface OrderItemProps {
     handleMouseOver:(event: MouseEvent<HTMLLIElement>)=> void;
     handleMouseOut : (event: MouseEvent<HTMLLIElement>)=> void;
     handleMouseDown: (event: MouseEvent<HTMLLIElement>)=> void;
+    deleteOrderItem: () => void;
 }
-
-
 
 export default function OrderItem({ 
     item ,  
     setRef,
     handleMouseOver, 
     handleMouseOut ,    
-    handleMouseDown , 
+    handleMouseDown, 
+    deleteOrderItem,
   }: OrderItemProps) { 
-  console.log( item.id)
+
   return (    
-    
-    <li      
+    <div>
+    <span className='cursor-pointer'     
       key= {item.id }          
       ref= { setRef( item.id )}
       onMouseOver={ handleMouseOver }
       onMouseOut={ handleMouseOut }      
       onMouseDown={ handleMouseDown }
     >
-    <div>{item.name}       
-          <button className='mx-3 px-1 bg-red-400'>del</button>                
-    </div>
-   
-  </li>  
+    { item.name}       
+       
+    </span>                                                                            
+   <span>
+      <button onClick={ deleteOrderItem } className='mx-2 px-2 bg-red-400 rounded-md'>del</button>  
+   </span> 
+                    
+   </div>  
   );
 }

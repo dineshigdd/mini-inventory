@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { useEffect, useState , useRef, useMemo  } from "react";
+import { useEffect, useState , useRef, useMemo, use  } from "react";
 import Inventory from "@/components/inventory";
 import { Suspense } from "react";
 import OrderList from "@/components/orderList";
@@ -24,11 +24,13 @@ export default  function Home() {
 
   const [ inventory, setInventory ] = useState<Item[]>([]);
   const [ orderList, setOrderList] = useState<Item[]>([]);
+  const [ quantityOrder , setQuantityOrder ] = useState(0)
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item
   const [selectedOrderListIndex, setSelectedIOrderListIndex] = useState<number | null>(null); // State to track the selected item
   const [ isItemselected, setIsItemselected ] = useState(false); 
   const tempList = useMemo<number[]>(() => [], []);
+  const [ itemToDelete, setItemToDelete ] = useState()
 
    useEffect(() => {
         (async () => {
@@ -44,6 +46,7 @@ const getSelectedItem = ( itemId: number | null )=>{
 }
 
 const getOrderSelectedItem = ( itemId: number | null )=>{
+  console.log( itemId)
   setSelectedIOrderListIndex( itemId ) 
 }
 
@@ -83,6 +86,7 @@ const handleDragEnd = (event: DragEndEvent) => {
       //  }          
             
       // tempList.push(  draggedItem.id )  
+      console.log( draggedItem)
       setOrderList((prevItems) =>[...prevItems, draggedItem]);     
   
     } 
@@ -103,6 +107,24 @@ useEffect(() => {
   } 
 },[!orderList]);
 
+
+useEffect(()=> {
+  if( quantityOrder < 0 ){
+     setQuantityOrder( 0 )
+  }
+},[ quantityOrder])
+
+//Deleting an item from the order list
+const deleteOrderItem = () => {
+  setOrderList((orderListItems) =>
+    orderListItems.filter((item, index) => item.id !== selectedOrderListIndex)
+  );
+};
+
+
+
+  
+
   return (
     <DndContext onDragEnd={handleDragEnd}>
     <div className="grid place-items-center min-h-screen bg-blue-100"> {/** <div className="flex items-center justify-center min-h-screen"> */}
@@ -117,6 +139,7 @@ useEffect(() => {
                     <OrderList 
                               orderList={ orderList }
                               getSelectedItem={ getOrderSelectedItem }
+                              deleteOrderItem = { deleteOrderItem }
                         />
                   
                 </Droppable>                
@@ -155,18 +178,22 @@ useEffect(() => {
                     <li>Quantity to order
                        {
                         orderList.map( item => 
-                          ( item.id == Number(selectedOrderListIndex) ) ? 
+                          ( item.id == Number(selectedOrderListIndex) ) ?                               
                               (
                               <>
-                                <input defaultValue='0' className="w-10" type='text' value= { item.quantity_in_hand } /> 
-                                <button className="bg-gray-500 w-fit m-2 px-2">+</button>
-                                <button className="bg-gray-500 w-fit m-2 px-2">-</button> 
+                                <input defaultValue='0' className="w-10" type='text' value= { quantityOrder} /> 
+                                <button 
+                                    onClick={ ()=>setQuantityOrder( quantityOrder + 1) } 
+                                    className="bg-gray-500 w-fit m-2 px-2">+</button>
+                                <button 
+                                    onClick={ ()=>setQuantityOrder( quantityOrder - 1) } 
+                                  className="bg-gray-500 w-fit m-2 px-2">-</button> 
                               </>
                             )
                               :
                             '') 
                         }
-                        
+                      <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">submit</button>    
                       </li>
                   </ul>
                      {/* <Link href={`/items/${selectedOrderListIndex}`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">View Item</Link>  

@@ -8,11 +8,12 @@ import { handleMouseOver , handleMouseDown , handleMouseOut  } from '@/utlltiy/i
 
 interface OrderListrops {
   orderList: Item[];
-  getSelectedItem: ( itemId: number | null ) => void
+  getSelectedItem: ( itemId: number | null ) => void;
+  deleteOrderItem:()=> void;
 }
 
 
-export default function OrderList( {  orderList, getSelectedItem }: OrderListrops){
+export default function OrderList( {  orderList, getSelectedItem , deleteOrderItem }: OrderListrops){
  
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [ selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item for highlighting
@@ -23,11 +24,12 @@ export default function OrderList( {  orderList, getSelectedItem }: OrderListrop
   const setRef = (index: number) => (element: HTMLLIElement | null) => listRef.current[index] = element;
   
   return (
-    <ul className="h-40 overflow-auto bg-slate-100 p-2 border border-gray-300">       
+    <ul className="h-40 overflow-auto bg-slate-100 p-2 border border-gray-300 min-w-[200px]">       
        { orderList.map( ( item )=> <OrderItem  
         key={ item.id }
         item={ item }                   
         setRef={ setRef }   
+        deleteOrderItem={ deleteOrderItem }
         handleMouseOver={ handleMouseOver({
           itemId:item.id,
           listRef,
