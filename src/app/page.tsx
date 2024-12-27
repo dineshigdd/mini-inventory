@@ -19,6 +19,7 @@ interface Item {
     date:Date,
 }
 
+
       
 
 export default  function Home() {
@@ -57,7 +58,7 @@ const handleDragEnd = (event: DragEndEvent) => {
 
         
   if (over?.id === 'droppable') {   
-        const draggedItem = inventory.find(item => item.id === active.id );     
+        const draggedItem = inventory.find(item => item.id === active.id );             
         const storedItems = localStorage.getItem('items');        
           
     if (draggedItem) {   
@@ -88,8 +89,21 @@ const handleDragEnd = (event: DragEndEvent) => {
             
       // tempList.push(  draggedItem.id )  
       // console.log( draggedItem)
-      setOrderList((prevItems) =>[...prevItems, draggedItem]);     
-  
+
+
+      // The code below do the same thing that two lines for code do. 
+      // This code set the quantity of the orderlist itmes to zero
+      setOrderList((prevItems) => [
+        ...prevItems.map((item) => ({ ...item, quantity_in_hand: 0 })), 
+        { ...draggedItem, quantity_in_hand: 0 }
+      ]);
+      
+      
+      //two lines of code
+      // setOrderList((prevItems) =>[...prevItems, draggedItem]);             
+      // setOrderList((prevOrderList) =>  prevOrderList.map((item) => ( { ...item, quantity_in_hand: 0 } )));
+
+
     } 
   } 
 };
@@ -115,6 +129,8 @@ useEffect(()=> {
   if( quantityOrder < 0 ){
      setQuantityOrder( 0 )
   }
+
+   
 },[ quantityOrder])
 
 //Deleting an item from the order list
@@ -127,7 +143,7 @@ useEffect(()=> {
 const deleteOrderItem = () => {
   setOrderList((orderListItems) => {
     // Log the current length of the array
-    console.log("orderListItems.length:", orderListItems.length);
+
 
     // Check if the array has more than one item
     if (orderListItems.length > 1 ) {
@@ -143,7 +159,23 @@ const deleteOrderItem = () => {
   });
 };
 
+   const saveQuantityOrdered = () => {
+    setOrderList((prevOrderList) =>
+      prevOrderList.map((item) => {
+        if (item.id === selectedOrderListIndex) {
+          return { ...item, quantity_in_hand: quantityOrder }; // Update quantity in hand immutably
+        }
+        return item; // Keep other items unchanged
+      })
+    );
   
+    setQuantityOrder( 0)
+    localStorage.setItem('items', JSON.stringify(orderList));
+  };
+  
+  const increaseQuantityOrder = ()=>{
+    setQuantityOrder( quantityOrder + 1)
+  }
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
@@ -191,12 +223,52 @@ const deleteOrderItem = () => {
                   <h1><strong>Order Items Management</strong></h1><br/>
                   <div className="flex justify-between -mt-4">
                   <ul>
-                    <li>Quantity in hand 
-                      { inventory.map( item => 
-                        (item.id == Number(selectedOrderListIndex) ) ? 
-                            item.quantity_in_hand: '')}</li>
-                    <li>Quantity to order
-                       {
+                  <li>
+                    <label className="mx-2">Quantity in hand</label>
+                    {(() => {
+                      console.log( selectedOrderListIndex)
+                      const inventoryItem = inventory.find(item => item.id === Number(selectedOrderListIndex));
+                  
+                      return (
+                        <input type="text" 
+                          className="w-10 text-center rounded-sm" 
+                          value= { inventoryItem ? JSON.stringify( inventoryItem.quantity_in_hand ): '0'}
+                      />
+                      );
+                    })()}
+                  </li>
+
+                    <li>
+                      <label className="mx-2">Quantity to order</label>
+                        {(
+                          () => {
+                                const selectedItem = orderList.find(item => item.id === Number(selectedOrderListIndex)) ;
+                                // Use 0 as the default value.nullish coalescing operator
+                                const quantity = selectedItem?.quantity_in_hand ?? 0; 
+                              return (
+                                <>
+                                  <input 
+                                      defaultValue= {  selectedItem?.quantity_in_hand }
+                                      className="w-10 text-center rounded-sm" type='text' 
+                                      value={ ( quantity > 0 ) ?  
+                                                selectedItem?.quantity_in_hand  : 
+                                                quantityOrder } 
+                                    /> 
+                                    <button 
+                                        onClick={ increaseQuantityOrder } 
+                                        className="bg-gray-500 w-fit m-2 px-2">+</button>
+                                    <button 
+                                        onClick={ ()=>setQuantityOrder( quantityOrder - 1) } 
+                                      className="bg-gray-500 w-fit m-2 px-2">-</button> 
+                                </>  
+                              );
+                            })()                           
+                            
+                            }
+                                                 
+                                                
+                                                
+                      {/* {
                         orderList.map( item => 
                           ( item.id == Number(selectedOrderListIndex) ) ?                               
                               (
@@ -212,8 +284,8 @@ const deleteOrderItem = () => {
                             )
                               :
                             '') 
-                        }
-                      <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">submit</button>    
+                        } */}
+                      <button onClick={ saveQuantityOrdered } className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">submit</button>    
                       </li>
                   </ul>
                      {/* <Link href={`/items/${selectedOrderListIndex}`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">View Item</Link>  
