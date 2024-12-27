@@ -94,10 +94,12 @@ const handleDragEnd = (event: DragEndEvent) => {
       // The code below do the same thing that two lines for code do. 
       // This code set the quantity of the orderlist itmes to zero
       setOrderList((prevItems) => [
-        ...prevItems.map((item) => ({ ...item, quantity_in_hand: 0 })), 
+        ...prevItems.map((item) =>  (item.quantity_in_hand <= 0) ? ({ ...item, quantity_in_hand: 0 }):(item)
+      ), 
         { ...draggedItem, quantity_in_hand: 0 }
       ]);
       
+
       
       //two lines of code
       // setOrderList((prevItems) =>[...prevItems, draggedItem]);             
@@ -166,43 +168,23 @@ const deleteOrderItem = () => {
   });
 };
 
+//this may not needed
    const saveQuantityOrdered = () => {  
     // setQuantityOrder( 0)
     localStorage.setItem('items', JSON.stringify(orderList));
   };
   
-  // useEffect(()=>{ 
-
-  //   setOrderList((prevOrderList) =>
-  //     prevOrderList.map((item) => {
-  //       if (item.id === selectedOrderListIndex) {
-  //         return { ...item, quantity_in_hand: quantityOrder }; // Update quantity in hand immutably
-  //       }
-  //       return item; // Keep other items unchanged
-  //     })
-  //   );
-    
-  // },[ quantityOrder ])
+  
 
   const saveQuatityToOrderList = () =>{
- 
-    // const selectedItem = orderList.find( item => item.id == selectedOrderListIndex );
-    //  setOrderList((prevOrderList) =>  prevOrderList.map((item) => ( { ...item, quantity_in_hand: quantityOrder } )));
-    
-
-
     setOrderList((prevOrderList) =>
       prevOrderList.map((item) => {
-        if (item.id === selectedOrderListIndex) {
-          console.log( selectedOrderListIndex)
-          console.log("quantityOrder before writing:" + quantityOrder);
+        if (item.id === selectedOrderListIndex) {         
           return { ...item, quantity_in_hand: quantityOrder }; // Update quantity in hand immutably
         }
         return item; // Keep other items unchanged
       })
-    );
-
-    // console.log( orderList.find( item => (item.id == selectedOrderListIndex ))?.quantity_in_hand )
+    );    
   }
 
 const readOrderQantityFromList = ()=>{
@@ -212,16 +194,13 @@ const readOrderQantityFromList = ()=>{
   console.log( "quantityOrder:" + quantityOrder)
 }
 
+//saving to orderlist  when changing the ordered quantity
 useEffect(()=>{
-  increaseOrderQuantity()
+  saveQuatityToOrderList();
 },[quantityOrder])
 
 
-const increaseOrderQuantity = ()=>{
-  // setQuantityOrder( quantityOrder + 1);
-  console.log( "quantityOrder in increaseOrderQuantity"+ quantityOrder)
-  saveQuatityToOrderList();
-}
+
   return (
     <DndContext onDragEnd={handleDragEnd}>
     <div className="grid place-items-center min-h-screen bg-blue-100"> {/** <div className="flex items-center justify-center min-h-screen"> */}
