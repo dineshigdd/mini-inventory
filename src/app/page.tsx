@@ -26,7 +26,7 @@ export default  function Home() {
 
   const [ inventory, setInventory ] = useState<Item[]>([]);
   const [ orderList, setOrderList] = useState<Item[]>([]);
-  const [ quantityOrder , setQuantityOrder ] = useState(0)
+  const [quantityOrder, setQuantityOrder] = useState<number>(0);
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item
   const [selectedOrderListIndex, setSelectedIOrderListIndex] = useState<number | null>(null); // State to track the selected item
@@ -129,9 +129,16 @@ useEffect(()=> {
   if( quantityOrder < 0 ){
      setQuantityOrder( 0 )
   }
-
    
-},[ quantityOrder])
+},[ quantityOrder ])
+
+
+useEffect(()=>{
+  console.log(selectedOrderListIndex)
+  // saveQuatityToOrderList()
+  readOrderQantityFromList()
+  // setQuantityOrder( 0 )
+},[selectedOrderListIndex])
 
 //Deleting an item from the order list
 // const deleteOrderItem = () => {
@@ -159,24 +166,62 @@ const deleteOrderItem = () => {
   });
 };
 
-   const saveQuantityOrdered = () => {
+   const saveQuantityOrdered = () => {  
+    // setQuantityOrder( 0)
+    localStorage.setItem('items', JSON.stringify(orderList));
+  };
+  
+  // useEffect(()=>{ 
+
+  //   setOrderList((prevOrderList) =>
+  //     prevOrderList.map((item) => {
+  //       if (item.id === selectedOrderListIndex) {
+  //         return { ...item, quantity_in_hand: quantityOrder }; // Update quantity in hand immutably
+  //       }
+  //       return item; // Keep other items unchanged
+  //     })
+  //   );
+    
+  // },[ quantityOrder ])
+
+  const saveQuatityToOrderList = () =>{
+ 
+    // const selectedItem = orderList.find( item => item.id == selectedOrderListIndex );
+    //  setOrderList((prevOrderList) =>  prevOrderList.map((item) => ( { ...item, quantity_in_hand: quantityOrder } )));
+    
+
+
     setOrderList((prevOrderList) =>
       prevOrderList.map((item) => {
         if (item.id === selectedOrderListIndex) {
+          console.log( selectedOrderListIndex)
+          console.log("quantityOrder before writing:" + quantityOrder);
           return { ...item, quantity_in_hand: quantityOrder }; // Update quantity in hand immutably
         }
         return item; // Keep other items unchanged
       })
     );
-  
-    setQuantityOrder( 0)
-    localStorage.setItem('items', JSON.stringify(orderList));
-  };
-  
-  const increaseQuantityOrder = ()=>{
-    setQuantityOrder( quantityOrder + 1)
+
+    // console.log( orderList.find( item => (item.id == selectedOrderListIndex ))?.quantity_in_hand )
   }
 
+const readOrderQantityFromList = ()=>{
+  console.log( selectedOrderListIndex)
+  const quantity = orderList.find( item => (item.id == selectedOrderListIndex ))?.quantity_in_hand ?? 0;
+  setQuantityOrder( quantity )
+  console.log( "quantityOrder:" + quantityOrder)
+}
+
+useEffect(()=>{
+  increaseOrderQuantity()
+},[quantityOrder])
+
+
+const increaseOrderQuantity = ()=>{
+  // setQuantityOrder( quantityOrder + 1);
+  console.log( "quantityOrder in increaseOrderQuantity"+ quantityOrder)
+  saveQuatityToOrderList();
+}
   return (
     <DndContext onDragEnd={handleDragEnd}>
     <div className="grid place-items-center min-h-screen bg-blue-100"> {/** <div className="flex items-center justify-center min-h-screen"> */}
@@ -226,7 +271,7 @@ const deleteOrderItem = () => {
                   <li>
                     <label className="mx-2">Quantity in hand</label>
                     {(() => {
-                      console.log( selectedOrderListIndex)
+                     
                       const inventoryItem = inventory.find(item => item.id === Number(selectedOrderListIndex));
                   
                       return (
@@ -244,18 +289,18 @@ const deleteOrderItem = () => {
                           () => {
                                 const selectedItem = orderList.find(item => item.id === Number(selectedOrderListIndex)) ;
                                 // Use 0 as the default value.nullish coalescing operator
-                                const quantity = selectedItem?.quantity_in_hand ?? 0; 
+                                // const quantity = selectedItem?.quantity_in_hand ?? 0 ;
+                                // console.log( "quantity and  selectedOrderListIndex")
+                                // console.log( quantity + " " + selectedOrderListIndex )
                               return (
                                 <>
-                                  <input 
-                                      defaultValue= {  selectedItem?.quantity_in_hand }
+                                  <input
+                                     
                                       className="w-10 text-center rounded-sm" type='text' 
-                                      value={ ( quantity > 0 ) ?  
-                                                selectedItem?.quantity_in_hand  : 
-                                                quantityOrder } 
+                                      value={ quantityOrder  }
                                     /> 
                                     <button 
-                                        onClick={ increaseQuantityOrder } 
+                                        onClick={ ()=>setQuantityOrder( quantityOrder + 1)  } 
                                         className="bg-gray-500 w-fit m-2 px-2">+</button>
                                     <button 
                                         onClick={ ()=>setQuantityOrder( quantityOrder - 1) } 
