@@ -29,7 +29,7 @@ export default function OrderItem({
   }: OrderItemProps) { 
 
   return (    
-    <div>
+    <div className='flex justify-between'>
     <span className='cursor-pointer'     
       key= {item.id }          
       ref= { setRef( item.id )}
@@ -41,7 +41,7 @@ export default function OrderItem({
        
     </span>                                                                            
    <span>
-      <button onClick={ deleteOrderItem } className='mx-2 px-2 bg-red-400 rounded-md'>del</button>  
+      <button onClick={ deleteOrderItem } className='mx-2 text-sm px-2 bg-red-400 rounded-md'>del</button>  
    </span> 
                     
    </div>  
