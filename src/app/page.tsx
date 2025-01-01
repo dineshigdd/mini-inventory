@@ -5,9 +5,10 @@ import { useEffect, useState , useRef, useMemo, use  } from "react";
 import Inventory from "@/components/inventory";
 import { Suspense } from "react";
 import OrderList from "@/components/orderList";
+import ItemOrderForm from "@/components/newOrderForm";
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { handleMouseOver , handleMouseDown , handleMouseOut ,  Droppable  } from '@/utlltiy/index';
-import { Red_Rose } from "next/font/google";
+
 
 
 
@@ -18,7 +19,7 @@ interface Item {
     category_code : string;
     date:Date,
 }
-
+``
 
       
 
@@ -169,7 +170,7 @@ const deleteOrderItem = () => {
 };
 
 //this may not needed
-   const saveQuantityOrdered = () => {  
+   const createOrder = () => {  
     // setQuantityOrder( 0)
     localStorage.setItem('items', JSON.stringify(orderList));
   };
@@ -263,54 +264,13 @@ useEffect(()=>{
                   </li>
 
                     <li>
-                      <label className="mx-2">Quantity to order</label>
-                        {(
-                          () => {
-                                const selectedItem = orderList.find(item => item.id === Number(selectedOrderListIndex)) ;
-                                // Use 0 as the default value.nullish coalescing operator
-                                // const quantity = selectedItem?.quantity_in_hand ?? 0 ;
-                                // console.log( "quantity and  selectedOrderListIndex")
-                                // console.log( quantity + " " + selectedOrderListIndex )
-                              return (
-                                <>
-                                  <input
-                                     
-                                      className="w-10 text-center rounded-sm" type='text' 
-                                      value={ quantityOrder  }
-                                    /> 
-                                    <button 
-                                        onClick={ ()=>setQuantityOrder( quantityOrder + 1)  } 
-                                        className="bg-gray-500 w-fit m-2 px-2">+</button>
-                                    <button 
-                                        onClick={ ()=>setQuantityOrder( quantityOrder - 1) } 
-                                      className="bg-gray-500 w-fit m-2 px-2">-</button> 
-                                </>  
-                              );
-                            })()                           
-                            
-                            }
-                                                 
-                                                
-                                                
-                      {/* {
-                        orderList.map( item => 
-                          ( item.id == Number(selectedOrderListIndex) ) ?                               
-                              (
-                              <>
-                                <input defaultValue='0' className="w-10" type='text' value= { quantityOrder} /> 
-                                <button 
-                                    onClick={ ()=>setQuantityOrder( quantityOrder + 1) } 
-                                    className="bg-gray-500 w-fit m-2 px-2">+</button>
-                                <button 
-                                    onClick={ ()=>setQuantityOrder( quantityOrder - 1) } 
-                                  className="bg-gray-500 w-fit m-2 px-2">-</button> 
-                              </>
-                            )
-                              :
-                            '') 
-                        } */}
-                      <button onClick={ saveQuantityOrdered } className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">submit</button>    
-                      </li>
+                      <ItemOrderForm 
+                          orderList={ orderList }  
+                          quantityOrder = { quantityOrder }
+                          setQuantityOrder = { setQuantityOrder }
+                          selectedOrderListIndex = { selectedOrderListIndex }
+                      />
+                    </li>
                   </ul>
                      {/* <Link href={`/items/${selectedOrderListIndex}`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">View Item</Link>  
                       <button className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">Covert to Image</button>                                                            */}
