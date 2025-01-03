@@ -2,6 +2,7 @@
 'use server';
 
 import  { db } from '@/db';
+import { Item } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -10,6 +11,7 @@ import { redirect } from 'next/navigation';
 
 export async function updateInventoryItem(  
     id: number,
+    orderList:Item[],
     formData: FormData){
     try{
                 

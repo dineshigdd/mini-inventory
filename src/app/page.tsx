@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { useEffect, useState , useRef, useMemo, use  } from "react";
+import { useEffect, useState , useRef, useMemo } from "react";
 import Inventory from "@/components/inventory";
 import { Suspense } from "react";
 import OrderList from "@/components/orderList";
@@ -13,27 +13,45 @@ import { handleMouseOver , handleMouseDown , handleMouseOut ,  Droppable  } from
 
 
 interface Item {
-    id: number,
+    id: number;
     name : string;
     quantity_in_hand: number;
     category_code : string;
     date:Date,
 }
-``
 
-      
+interface Order {
+    itemId: number;
+    name: string;
+    quantity_order:number;
+    category_code: string;  
+    orderDate:Date;
+}
 
 export default  function Home() {
 
   const [ inventory, setInventory ] = useState<Item[]>([]);
-  const [ orderList, setOrderList] = useState<Item[]>([]);
+  const [ orderList, setOrderList ] = useState<any[]>([]);
   const [quantityOrder, setQuantityOrder] = useState<number>(0);
   const listRef = useRef<(HTMLLIElement | null )[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // State to track the selected item
   const [selectedOrderListIndex, setSelectedIOrderListIndex] = useState<number | null>(null); // State to track the selected item
   const [ isItemselected, setIsItemselected ] = useState(false); 
   const tempList = useMemo<number[]>(() => [], []);
-  const [ itemToDelete, setItemToDelete ] = useState()
+  const [ itemToDelete, setItemToDelete ] = useState();
+
+
+  type KeyEntriesItem =   { id: string;
+    quantity_in_hand: string;
+    date: string;
+    [key: string]: string; // Index signature
+  };
+
+  const keyMap :KeyEntriesItem = { 
+    id: 'itemId', 
+    quantity_in_hand: 'quantity_order', 
+    date: 'orderDate'
+  };
 
    useEffect(() => {
         (async () => {
@@ -49,6 +67,7 @@ const getSelectedItem = ( itemId: number | null )=>{
 }
 
 const getOrderSelectedItem = ( itemId: number | null )=>{
+  console.log( "====getOrderSelectedItem==")
   console.log( itemId)
   setSelectedIOrderListIndex( itemId ) 
 }
@@ -59,14 +78,14 @@ const handleDragEnd = (event: DragEndEvent) => {
 
         
   if (over?.id === 'droppable') {   
-        const draggedItem = inventory.find(item => item.id === active.id );             
+        const draggedItem = inventory.find(item => item.id === active.id );                 
         const storedItems = localStorage.getItem('items');        
           
     if (draggedItem) {   
       if( storedItems ){
           const storedItemsArr = JSON.parse( storedItems );
           for (let i = 0; i < storedItemsArr.length; i++) {
-            if (storedItemsArr[i].id == draggedItem.id) {
+            if (storedItemsArr[i].itemId == draggedItem.id) {
               return; 
             }
           }
@@ -91,24 +110,39 @@ const handleDragEnd = (event: DragEndEvent) => {
       // tempList.push(  draggedItem.id )  
       // console.log( draggedItem)
 
+      //change keys 
+      // const orderItem = Object.fromEntries(
+      //   Object.entries(draggedItem).map(([key, value]) => [
+      //     keyMap
+      //     [key] || key, value])
+      // );
 
+      const orderItem = Object.fromEntries(
+        Object.entries(draggedItem).map(([key, value]) => [keyMap[key] || key, value])
+      );
+      // console.log(orderItem)
+      // console.log(updatedObject)
       // The code below do the same thing that two lines for code do. 
       // This code set the quantity of the orderlist itmes to zero
+      // setOrderList( ( prevItems ) => [...prevItems, orderItem])
+
       setOrderList((prevItems) => [
-        ...prevItems.map((item) =>  (item.quantity_in_hand <= 0) ? ({ ...item, quantity_in_hand: 0 }):(item)
+        ...prevItems.map((item) =>  (item.quantity_order <= 0) ? ({ ...item,  quantity_order: 0 }):(item)
       ), 
-        { ...draggedItem, quantity_in_hand: 0 }
+        { ...orderItem,  quantity_order: 0 }
       ]);
       
 
-      
+   
       //two lines of code
-      // setOrderList((prevItems) =>[...prevItems, draggedItem]);             
+      // setOrderList((prevItems) =>[...prevItems, orderItem]);             
       // setOrderList((prevOrderList) =>  prevOrderList.map((item) => ( { ...item, quantity_in_hand: 0 } )));
 
 
     } 
   } 
+
+
 };
 
 useEffect(() => {
@@ -158,7 +192,7 @@ const deleteOrderItem = () => {
     // Check if the array has more than one item
     if (orderListItems.length > 1 ) {
       // Return the filtered array
-      return orderListItems.filter((item) => item.id !== selectedOrderListIndex);
+      return orderListItems.filter((item) => item.itemId !== selectedOrderListIndex);
     }
     else{
       localStorage.clear()
@@ -169,19 +203,15 @@ const deleteOrderItem = () => {
   });
 };
 
-//this may not needed
-   const createOrder = () => {  
-    // setQuantityOrder( 0)
-    localStorage.setItem('items', JSON.stringify(orderList));
-  };
+
   
   
 
   const saveQuatityToOrderList = () =>{
     setOrderList((prevOrderList) =>
       prevOrderList.map((item) => {
-        if (item.id === selectedOrderListIndex) {         
-          return { ...item, quantity_in_hand: quantityOrder }; // Update quantity in hand immutably
+        if (item.itemId === selectedOrderListIndex) {         
+          return { ...item, quantity_order: quantityOrder }; // Update quantity in hand immutably
         }
         return item; // Keep other items unchanged
       })
@@ -190,7 +220,7 @@ const deleteOrderItem = () => {
 
 const readOrderQantityFromList = ()=>{
   console.log( selectedOrderListIndex)
-  const quantity = orderList.find( item => (item.id == selectedOrderListIndex ))?.quantity_in_hand ?? 0;
+  const quantity = orderList.find( item => (item.itemId == selectedOrderListIndex ))?.quantity_order ?? 0;
   setQuantityOrder( quantity )
   console.log( "quantityOrder:" + quantityOrder)
 }
@@ -264,12 +294,14 @@ useEffect(()=>{
                   </li>
 
                     <li>
-                      <ItemOrderForm 
+                      {( selectedOrderListIndex !== null ) ? <ItemOrderForm 
                           orderList={ orderList }  
                           quantityOrder = { quantityOrder }
                           setQuantityOrder = { setQuantityOrder }
-                          selectedOrderListIndex = { selectedOrderListIndex }
-                      />
+                          selectedOrderListIndex = { selectedOrderListIndex  }
+                      
+                      />:'' } 
+
                     </li>
                   </ul>
                      {/* <Link href={`/items/${selectedOrderListIndex}`} className="bg-lime-500 w-fit m-2 px-5 py-2 rounded-full" type="button">View Item</Link>  

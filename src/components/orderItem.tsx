@@ -4,10 +4,11 @@ import React , { MouseEvent, MouseEventHandler, useEffect }  from 'react';
 
 interface OrderItem {
   id: number;
+  itemId: number;
   name: string;
-  quantity_in_hand: number;
+  quantity_order: number;
   category_code: string;
-  date: Date;
+  orderDate: Date;
 };
 
 interface OrderItemProps {
@@ -31,8 +32,8 @@ export default function OrderItem({
   return (    
     <div className='flex justify-between'>
     <span className='cursor-pointer'     
-      key= {item.id }          
-      ref= { setRef( item.id )}
+      key= {item.itemId}          
+      ref= { setRef( item.itemId )}
       onMouseOver={ handleMouseOver }
       onMouseOut={ handleMouseOut }      
       onMouseDown={ handleMouseDown }

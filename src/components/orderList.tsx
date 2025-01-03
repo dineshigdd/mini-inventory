@@ -1,13 +1,13 @@
 'use client';
 
 
-import { Item } from "@prisma/client";
+import { Order  } from "@prisma/client";
 import React, { useState , useRef , MouseEvent } from 'react';
 import OrderItem from '@/components/orderItem';
 import { handleMouseOver , handleMouseDown , handleMouseOut  } from '@/utlltiy/index';
 
 interface OrderListrops {
-  orderList: Item[];
+  orderList: Order[];
   getSelectedItem: ( itemId: number | null ) => void;
   deleteOrderItem:()=> void;
 }
@@ -26,36 +26,36 @@ export default function OrderList( {  orderList, getSelectedItem , deleteOrderIt
   return (
     <ul className="h-40 overflow-auto bg-slate-100 p-2 border border-gray-300 min-w-[200px]">       
        { orderList.map( ( item )=> <OrderItem  
-        key={ item.id }
-        item={ item }                   
-        setRef={ setRef }   
-        deleteOrderItem={ deleteOrderItem }
-        handleMouseOver={ handleMouseOver({
-          itemId:item.id,
-          listRef,
-          selectedIndex, 
-          isItemselected,
-          setSelectedMouseOverIndex,
-                         
-        })}
+          key={ item.itemId }
+          item={ item }                   
+          setRef={ setRef }   
+          deleteOrderItem={ deleteOrderItem }
+          handleMouseOver={ handleMouseOver({
+            itemId:item.itemId,
+            listRef,
+            selectedIndex, 
+            isItemselected,
+            setSelectedMouseOverIndex,
+                          
+          })}
 
-        handleMouseOut = { handleMouseOut({
-          itemId:item.id,
-          listRef,
-          selectedIndex,
-          isItemselected, 
-        })}           
+          handleMouseOut = { handleMouseOut({
+            itemId:item.itemId,
+            listRef,
+            selectedIndex,
+            isItemselected, 
+          })}           
 
-        handleMouseDown={ handleMouseDown({
-          itemId:item.id,
-          listRef,
-          selectedIndex,
-          selectedMouseOverIndex,
-          getSelectedItem,
-          setIsItemselected,
-          setSelectedIndex
-        })} 
-        
+          handleMouseDown={ handleMouseDown({
+            itemId:item.itemId,
+            listRef,
+            selectedIndex,
+            selectedMouseOverIndex,
+            getSelectedItem,
+            setIsItemselected,
+            setSelectedIndex
+          })} 
+          
        
        
        />)}

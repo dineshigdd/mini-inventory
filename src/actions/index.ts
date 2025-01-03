@@ -5,3 +5,4 @@ export { fetchCategory } from "./category/fetchCategory"
 export { deleteInventoryItem } from "./inventory/deleteItem";
 export { fetchInventoryItem } from "./inventory/fetchInventoryItem";
 export { updateInventoryItem } from "./inventory/updateInventoryItem";
+export { createOrder } from "./order/createOrder"

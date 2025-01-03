@@ -23,7 +23,7 @@ interface MouseOverProps {
 
     const item = listRef.current ? listRef.current[itemId] : null;
 
-
+    console.log( itemId)
     setSelectedMouseOverIndex( itemId )
     
     if( itemId && item?.style  ){
